@@ -1,0 +1,93 @@
+﻿# GitHub 上传说明
+
+## 1. 建议上传内容
+
+建议上传：
+
+```text
+configs/
+docs/
+images/
+results/day6_batch_benchmark.csv
+results/day7_figures/
+scripts/
+README.md
+requirements.txt
+.gitignore
+run_pipeline.bat
+GITHUB_UPLOAD_GUIDE.md
+
+
+
+
+
+
+
+
+Write-Host "=== Day 9: Local project engineering started ==="
+
+# 1. Create engineering folders
+New-Item -ItemType Directory -Force -Path "configs" | Out-Null
+New-Item -ItemType Directory -Force -Path "docs" | Out-Null
+New-Item -ItemType Directory -Force -Path "docs\daily_logs" | Out-Null
+New-Item -ItemType Directory -Force -Path "docs\resume" | Out-Null
+New-Item -ItemType Directory -Force -Path "docs\review" | Out-Null
+
+Write-Host "Created folders: configs, docs, docs\daily_logs, docs\resume, docs\review"
+
+# 2. Move daily log files into docs/daily_logs if they exist
+$dailyFiles = @(
+    "Day2_环境搭建与PyTorch推理.md",
+    "Day3_真实图片输入与PyTorch单图分类.md",
+    "Day4_PyTorch模型导出ONNX.md",
+    "Day5_ONNXRuntime推理与PyTorch对比.md",
+    "Day6_BatchSize推理性能测试.md",
+    "Day7_性能曲线可视化.md"
+)
+
+foreach ($file in $dailyFiles) {
+    if (Test-Path $file) {
+        Move-Item -Force $file "docs\daily_logs\$file"
+        Write-Host "Moved:" $file "-> docs\daily_logs"
+    }
+}
+
+# 3. Move resume project description if it exists
+if (Test-Path "简历项目描述_端侧AI部署.md") {
+    Move-Item -Force "简历项目描述_端侧AI部署.md" "docs\resume\简历项目描述_端侧AI部署.md"
+    Write-Host "Moved: 简历项目描述_端侧AI部署.md -> docs\resume"
+}
+
+# 4. Create .gitignore
+@'
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+.edge_ai/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large model files
+models/*.onnx
+models/*.pth
+models/*.pt
+
+# Temporary files
+*.tmp
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
