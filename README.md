@@ -1,16 +1,25 @@
-# 基于 PyTorch 与 ONNX Runtime 的轻量化图像分类模型部署与推理优化系统
+# Edge AI ONNX Runtime Benchmark
 
-## 1. 项目简介
+基于 PyTorch 与 ONNX Runtime 的轻量化图像分类模型部署与推理优化系统。
 
-本项目实现了一个从 PyTorch 模型推理、ONNX 模型导出、ONNX Runtime 部署推理到性能测试与可视化分析的完整端侧 AI 推理流程。
+本项目实现了一个完整的端侧 AI 推理部署流程，覆盖 PyTorch 模型推理、ONNX 模型导出、ONNX Runtime 部署推理、结果一致性验证、batch size 性能测试与可视化分析。
 
-项目以 ImageNet 预训练 ResNet18 为基础模型，完成真实图片分类推理，并对比 PyTorch 与 ONNX Runtime 在 CPU 环境下的推理结果一致性、平均延迟、FPS 和不同 batch size 下的性能变化。
+## 1. Project Overview
 
-本项目的目标是验证 ONNX Runtime 在端侧 AI / 边缘计算场景中的部署价值，并形成一个可复现、可展示、可扩展的轻量化模型部署实验框架。
+在端侧 AI 和边缘智能场景中，模型不能只停留在训练框架中，还需要转换成更适合部署和推理优化的格式。
 
----
+本项目以 ImageNet 预训练 ResNet18 为基础模型，完成从 PyTorch 到 ONNX Runtime 的推理部署流程，并在 CPU 环境下对比 PyTorch 与 ONNX Runtime 的推理性能。
 
-## 2. 技术栈
+核心目标包括：
+
+* 跑通 PyTorch 图像分类推理流程
+* 将 PyTorch 模型导出为 ONNX 格式
+* 使用 ONNX Runtime 加载 ONNX 模型并完成 CPU 推理
+* 验证 ONNX Runtime 与 PyTorch 输出结果的一致性
+* 测试不同 batch size 下的推理延迟、FPS 和加速比
+* 将性能结果保存为 CSV 并生成可视化曲线
+
+## 2. Tech Stack
 
 * Python
 * PyTorch
@@ -21,31 +30,19 @@
 * Pandas
 * Matplotlib
 * Pillow
-* OpenCV
+* Git
 
----
-
-## 3. 项目功能
-
-本项目目前完成了以下功能：
-
-* PyTorch ResNet18 随机输入推理
-* 真实图片输入与图像预处理
-* ImageNet 预训练模型单图分类推理
-* PyTorch 模型导出为 ONNX 格式
-* ONNX Runtime 加载 ONNX 模型并完成推理
-* PyTorch 与 ONNX Runtime Top-K 分类结果对比
-* PyTorch 与 ONNX Runtime 输出 logits 数值误差对比
-* 不同 batch size 下的推理延迟、FPS 和加速比测试
-* 性能测试结果保存为 CSV
-* 性能曲线图可视化
-
----
-
-## 4. 项目结构
+## 3. Project Structure
 
 ```text
 edge_ai_onnx_project
+├── configs
+│   └── experiment_config.json
+├── docs
+│   ├── INTERVIEW_QA.md
+│   ├── daily_logs
+│   ├── resume
+│   └── review
 ├── images
 │   ├── cat.jpg
 │   └── test.jpg
@@ -55,34 +52,34 @@ edge_ai_onnx_project
 ├── results
 │   ├── day6_batch_benchmark.csv
 │   └── day7_figures
-│       ├── day7_batch_latency_curve.png
-│       ├── day7_image_latency_curve.png
-│       ├── day7_fps_curve.png
-│       └── day7_speedup_curve.png
 ├── scripts
 │   ├── day2_pytorch_inference.py
 │   ├── day3_real_image_inference.py
-│   ├── day3_simple_inference.py
 │   ├── day4_export_onnx.py
 │   ├── day5_onnxruntime_inference.py
 │   ├── day6_batch_benchmark.py
-│   └── day7_plot_curves.py
+│   ├── day7_plot_curves.py
+│   └── run_all_pipeline.py
+├── .gitignore
+├── GITHUB_UPLOAD_GUIDE.md
 ├── README.md
-└── requirements.txt
+├── requirements.txt
+└── run_pipeline.bat
 ```
 
----
+说明：`models/*.onnx` 文件较大，已在 `.gitignore` 中忽略。ONNX 模型可以通过脚本重新生成。
 
-## 5. 环境配置
+## 4. Quick Start
 
-### 创建 Conda 环境
+### 4.1 Create Environment
 
 ```bash
 conda create -n edge_ai python=3.10 -y
 conda activate edge_ai
+pip install -r requirements.txt
 ```
 
-### 安装依赖
+如果不使用 `requirements.txt`，也可以手动安装核心依赖：
 
 ```bash
 pip install torch torchvision torchaudio
@@ -90,147 +87,69 @@ pip install numpy pandas matplotlib pillow opencv-python
 pip install onnx onnxruntime onnxscript
 ```
 
-或者使用项目中的依赖文件：
+### 4.2 Run Full Pipeline
 
 ```bash
-pip install -r requirements.txt
+python scripts/run_all_pipeline.py --image images/cat.jpg --skip_day2
 ```
 
----
+该命令会依次运行：
 
-## 6. 运行流程
+* PyTorch 真实图片推理
+* PyTorch 模型导出 ONNX
+* ONNX Runtime 推理与 PyTorch 对比
+* batch size 性能测试
+* 性能曲线生成
 
-### 6.1 PyTorch 随机输入推理
+如果希望运行 Day 2 的 PyTorch 随机输入 smoke test，可以去掉 `--skip_day2`：
 
 ```bash
-python scripts/day2_pytorch_inference.py
+python scripts/run_all_pipeline.py --image images/cat.jpg
 ```
 
-该脚本用于验证 PyTorch 模型加载、输入构造、前向推理和延迟统计流程。
-
----
-
-### 6.2 真实图片 PyTorch 推理
+Windows 用户也可以直接运行：
 
 ```bash
-python scripts/day3_real_image_inference.py --image images/cat.jpg
+run_pipeline.bat
 ```
 
-该脚本使用 ImageNet 预训练 ResNet18 对真实图片进行分类，并输出 Top-K 分类结果和推理延迟。
+## 5. Main Scripts
 
----
+| Script                                  | Function                    |
+| --------------------------------------- | --------------------------- |
+| `scripts/day2_pytorch_inference.py`     | PyTorch 随机输入推理测试            |
+| `scripts/day3_real_image_inference.py`  | 真实图片 PyTorch 分类推理           |
+| `scripts/day4_export_onnx.py`           | PyTorch 模型导出 ONNX           |
+| `scripts/day5_onnxruntime_inference.py` | ONNX Runtime 推理与 PyTorch 对比 |
+| `scripts/day6_batch_benchmark.py`       | 不同 batch size 下的推理性能测试      |
+| `scripts/day7_plot_curves.py`           | 根据 CSV 生成性能曲线图              |
+| `scripts/run_all_pipeline.py`           | 一键运行完整流程                    |
 
-### 6.3 PyTorch 模型导出 ONNX
+## 6. Experimental Results
 
-```bash
-python scripts/day4_export_onnx.py
-```
+### 6.1 Single Image Inference
 
-该脚本将 PyTorch ResNet18 模型导出为 ONNX 格式，并使用 `onnx.checker.check_model` 检查模型是否合法。
+| Image    | Runtime      | Top-1 Result | Avg Latency ms |    FPS | Speedup |
+| -------- | ------------ | ------------ | -------------: | -----: | ------: |
+| cat.jpg  | PyTorch      | Egyptian cat |         12.930 |  77.34 |   1.00x |
+| cat.jpg  | ONNX Runtime | Egyptian cat |          4.851 | 206.16 |   2.67x |
+| test.jpg | PyTorch      | Pomeranian   |         11.021 |  90.73 |   1.00x |
+| test.jpg | ONNX Runtime | Pomeranian   |          4.601 | 217.34 |   2.40x |
 
-输出文件：
+在两张测试图片上，PyTorch 与 ONNX Runtime 的 Top-5 分类结果保持一致，logits 最大绝对误差约为 `1e-5`。
 
-```text
-models/resnet18_imagenet.onnx
-```
+### 6.2 Batch Size Benchmark
 
----
+| Batch size | PyTorch batch latency ms | ONNX batch latency ms | PyTorch FPS | ONNX FPS | Speedup | Max diff |
+| ---------: | -----------------------: | --------------------: | ----------: | -------: | ------: | -------: |
+|          1 |                   12.290 |                 5.352 |       81.37 |   186.85 |   2.30x | 0.000008 |
+|          2 |                   15.216 |                 7.049 |      131.44 |   283.74 |   2.16x | 0.000008 |
+|          4 |                   23.561 |                11.433 |      169.77 |   349.87 |   2.06x | 0.000008 |
+|          8 |                   42.773 |                21.405 |      187.04 |   373.75 |   2.00x | 0.000008 |
 
-### 6.4 ONNX Runtime 推理与 PyTorch 对比
+实验结果表明，ONNX Runtime 在所有 batch size 下均明显快于 PyTorch，并保持稳定的输出一致性。
 
-```bash
-python scripts/day5_onnxruntime_inference.py --image images/cat.jpg
-python scripts/day5_onnxruntime_inference.py --image images/test.jpg
-```
-
-该脚本对比 PyTorch 与 ONNX Runtime 在真实图片上的 Top-5 分类结果、logits 数值误差、平均推理延迟和 FPS。
-
----
-
-### 6.5 Batch Size 推理性能测试
-
-```bash
-python scripts/day6_batch_benchmark.py --image images/cat.jpg
-```
-
-该脚本导出支持动态 batch size 的 ONNX 模型，并测试 batch size = 1、2、4、8 时 PyTorch 与 ONNX Runtime 的推理性能。
-
-输出文件：
-
-```text
-models/resnet18_imagenet_dynamic.onnx
-results/day6_batch_benchmark.csv
-```
-
----
-
-### 6.6 性能曲线可视化
-
-```bash
-python scripts/day7_plot_curves.py
-```
-
-该脚本读取 Day 6 生成的 CSV 文件，并绘制性能曲线图。
-
-输出图片：
-
-```text
-results/day7_figures/day7_batch_latency_curve.png
-results/day7_figures/day7_image_latency_curve.png
-results/day7_figures/day7_fps_curve.png
-results/day7_figures/day7_speedup_curve.png
-```
-
----
-
-## 7. 实验结果
-
-### 7.1 PyTorch 与 ONNX Runtime 单图推理对比
-
-在 `cat.jpg` 上：
-
-| 框架           | Top-1 结果     | 平均延迟 ms |    FPS |
-| ------------ | ------------ | ------: | -----: |
-| PyTorch      | Egyptian cat |  12.930 |  77.34 |
-| ONNX Runtime | Egyptian cat |   4.851 | 206.16 |
-
-ONNX Runtime 相比 PyTorch 加速约：
-
-```text
-2.67x
-```
-
-在 `test.jpg` 上：
-
-| 框架           | Top-1 结果   | 平均延迟 ms |    FPS |
-| ------------ | ---------- | ------: | -----: |
-| PyTorch      | Pomeranian |  11.021 |  90.73 |
-| ONNX Runtime | Pomeranian |   4.601 | 217.34 |
-
-ONNX Runtime 相比 PyTorch 加速约：
-
-```text
-2.40x
-```
-
-两张图片上 PyTorch 与 ONNX Runtime 的 Top-5 分类结果完全一致，logits 最大绝对误差约为 `1e-5`，说明 ONNX 导出后的模型输出与 PyTorch 基本一致。
-
----
-
-### 7.2 Batch Size 性能测试结果
-
-| Batch size | PyTorch batch latency ms | ONNX batch latency ms | PyTorch image latency ms | ONNX image latency ms | PyTorch FPS | ONNX FPS | Speedup | Max diff |
-| ---------: | -----------------------: | --------------------: | -----------------------: | --------------------: | ----------: | -------: | ------: | -------: |
-|          1 |                   12.290 |                 5.352 |                   12.290 |                 5.352 |       81.37 |   186.85 |   2.30x | 0.000008 |
-|          2 |                   15.216 |                 7.049 |                    7.608 |                 3.524 |      131.44 |   283.74 |   2.16x | 0.000008 |
-|          4 |                   23.561 |                11.433 |                    5.890 |                 2.858 |      169.77 |   349.87 |   2.06x | 0.000008 |
-|          8 |                   42.773 |                21.405 |                    5.347 |                 2.676 |      187.04 |   373.75 |   2.00x | 0.000008 |
-
-实验结果表明，ONNX Runtime 在所有 batch size 下均明显快于 PyTorch，并保持约 `2.00x~2.30x` 的 CPU 推理加速效果。
-
----
-
-## 8. 性能曲线
+## 7. Visualization
 
 ### Batch Size vs Batch Latency
 
@@ -248,42 +167,48 @@ ONNX Runtime 相比 PyTorch 加速约：
 
 ![ONNX Runtime Speedup over PyTorch](results/day7_figures/day7_speedup_curve.png)
 
----
+## 8. Key Findings
 
-## 9. 结果分析
+本项目得到以下结论：
 
-从延迟角度看，ONNX Runtime 在所有 batch size 下都具有更低的 batch latency 和 image latency。例如在 batch size = 1 时，PyTorch batch latency 为 `12.290 ms`，ONNX Runtime 为 `5.352 ms`；在 batch size = 8 时，PyTorch batch latency 为 `42.773 ms`，ONNX Runtime 为 `21.405 ms`。
+* ONNX Runtime 可以正确加载由 PyTorch 导出的 ONNX 模型
+* ONNX Runtime 与 PyTorch 的 Top-K 分类结果基本一致
+* 两者 logits 最大绝对误差约为 `1e-5`
+* 在 CPU 推理场景下，ONNX Runtime 相比 PyTorch 实现约 `2.00x` 到 `2.67x` 的推理加速
+* 增大 batch size 可以提升整体 FPS，并降低单图平均推理延迟
+* ONNX Runtime 适合作为端侧 AI / 边缘计算场景中的模型部署与推理优化工具
 
-从吞吐角度看，随着 batch size 增大，PyTorch 与 ONNX Runtime 的 FPS 均明显提升。其中 ONNX Runtime FPS 从 `186.85` 提升到 `373.75`，说明批量推理能够显著提升整体吞吐率。
+## 9. Resume Highlight
 
-从加速比角度看，ONNX Runtime 在 batch size = 1、2、4、8 下分别实现了 `2.30x`、`2.16x`、`2.06x` 和 `2.00x` 的加速，说明 ONNX Runtime 在 CPU 推理场景下具有稳定的性能优势。
+本项目可以作为端侧 AI、模型部署、AI 工程化和边缘智能方向的求职项目。
 
-从输出一致性角度看，所有 batch size 下 PyTorch 与 ONNX Runtime 的最大 logits 误差均为 `0.000008`，说明 ONNX Runtime 推理结果与 PyTorch 基本一致，不存在明显数值偏差。
+简历描述示例：
 
----
+> 围绕端侧 AI 模型部署场景，构建 PyTorch → ONNX → ONNX Runtime 的图像分类推理流程，覆盖模型加载、真实图片预处理、ONNX 导出、部署推理、性能测试与可视化分析；设计 batch size = 1、2、4、8 的推理 benchmark，实验显示 ONNX Runtime 在 CPU 上相比 PyTorch 实现约 2.00x 到 2.67x 推理加速。
 
-## 10. 项目结论
-
-本项目完成了从 PyTorch 模型推理到 ONNX Runtime 部署推理的完整最小闭环。
-
-实验结果表明：
-
-* ONNX Runtime 可以正确加载 PyTorch 导出的 ONNX 模型
-* ONNX Runtime 与 PyTorch 的 Top-K 分类结果保持一致
-* ONNX Runtime 与 PyTorch 的输出 logits 误差约为 `1e-5`
-* ONNX Runtime 在 CPU 上相比 PyTorch 实现约 `2.00x~2.67x` 的推理加速
-* batch size 增大可以提升整体 FPS，并降低单图平均推理延迟
-* ONNX Runtime 适合作为端侧 AI / 边缘计算场景中的模型部署和推理优化工具
-
----
-
-## 11. 后续优化方向
+## 10. Future Work
 
 后续可以继续扩展：
 
 * 对比 ResNet18 与 MobileNetV2 的模型大小、延迟和 FPS
 * 增加 ONNX 动态量化实验
-* 测试 batch size 对内存占用的影响
+* 测试推理过程中的内存占用
 * 增加多图片批量推理功能
-* 将推理流程封装为命令行工具
-* 在 Linux 或边缘设备上进行部署测试
+* 在 Linux 或真实边缘设备上部署
+* 尝试 TensorRT、OpenVINO、NCNN 等推理后端
+* 增加更完整的命令行参数和配置文件读取逻辑
+
+## 11. Project Status
+
+当前项目状态：
+
+* PyTorch 推理流程：完成
+* ONNX 导出：完成
+* ONNX Runtime 推理：完成
+* 输出一致性验证：完成
+* batch size benchmark：完成
+* 性能曲线可视化：完成
+* README 与面试材料：完成
+* Git 版本管理：完成
+
+该项目已经形成一个可运行、可展示、可讲解的端侧 AI 模型部署项目雏形。
