@@ -1,0 +1,80 @@
+{
+  "seed": 20260825,
+  "tasks": [
+    {
+      "runtime": "ort_python",
+      "repeat_id": 5,
+      "run_order": 1
+    },
+    {
+      "runtime": "pytorch",
+      "repeat_id": 4,
+      "run_order": 2
+    },
+    {
+      "runtime": "pytorch",
+      "repeat_id": 2,
+      "run_order": 3
+    },
+    {
+      "runtime": "ort_python",
+      "repeat_id": 3,
+      "run_order": 4
+    },
+    {
+      "runtime": "pytorch",
+      "repeat_id": 5,
+      "run_order": 5
+    },
+    {
+      "runtime": "ort_cpp",
+      "repeat_id": 4,
+      "run_order": 6
+    },
+    {
+      "runtime": "ort_cpp",
+      "repeat_id": 3,
+      "run_order": 7
+    },
+    {
+      "runtime": "pytorch",
+      "repeat_id": 1,
+      "run_order": 8
+    },
+    {
+      "runtime": "ort_cpp",
+      "repeat_id": 5,
+      "run_order": 9
+    },
+    {
+      "runtime": "pytorch",
+      "repeat_id": 3,
+      "run_order": 10
+    },
+    {
+      "runtime": "ort_cpp",
+      "repeat_id": 2,
+      "run_order": 11
+    },
+    {
+      "runtime": "ort_cpp",
+      "repeat_id": 1,
+      "run_order": 12
+    },
+    {
+      "runtime": "ort_python",
+      "repeat_id": 4,
+      "run_order": 13
+    },
+    {
+      "runtime": "ort_python",
+      "repeat_id": 2,
+      "run_order": 14
+    },
+    {
+      "runtime": "ort_python",
+      "repeat_id": 1,
+      "run_order": 15
+    }
+  ]
+}

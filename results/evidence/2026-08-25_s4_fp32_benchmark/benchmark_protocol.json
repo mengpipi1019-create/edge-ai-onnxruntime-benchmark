@@ -1,0 +1,39 @@
+{
+  "protocol_id": "s4_fp32_cpu_single_core_2026-08-25",
+  "status": "frozen_before_measurement",
+  "scenario": "FP32 CPU inference-only",
+  "model": {
+    "path": "results/evidence/2026-08-25_s1_baseline/resnet18_imagenet_s1.onnx",
+    "sha256": "c5ef909be6cda03f0f87a7354355468944e7f8840d5d2d83c344fdbf4a5d3bf6"
+  },
+  "input": {
+    "source": "S3 cat_original torchvision canonical tensor",
+    "shape": [1, 3, 224, 224],
+    "dtype": "little-endian float32",
+    "batch_size": 1
+  },
+  "resources": {
+    "logical_cpu": 0,
+    "threads": 1,
+    "environment": {
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    }
+  },
+  "runtime_configuration": {
+    "pytorch": {"eval": true, "inference_mode": true, "intra_op_threads": 1, "inter_op_threads": 1},
+    "ort_python": {"provider": "CPUExecutionProvider", "intra_op_threads": 1, "inter_op_threads": 1, "execution_mode": "ORT_SEQUENTIAL", "graph_optimization": "ORT_ENABLE_ALL"},
+    "ort_cpp": {"provider": "CPUExecutionProvider", "intra_op_threads": 1, "inter_op_threads": 1, "execution_mode": "ORT_SEQUENTIAL", "graph_optimization": "ORT_ENABLE_ALL", "build_type": "Release"}
+  },
+  "measurement": {
+    "warmup_iterations": 50,
+    "measured_iterations_per_process": 300,
+    "independent_process_repeats_per_runtime": 5,
+    "total_measured_rows": 4500,
+    "timer": {"python": "time.perf_counter_ns", "cpp": "std::chrono::steady_clock"},
+    "timing_boundary": "exactly one forward or Session::Run call"
+  },
+  "schedule": {"method": "random.Random(20260825).shuffle", "seed": 20260825},
+  "stability": {"repeat_median_cv_max_percent": 10.0},
+  "historical_result_policy": "Do not mix historical README speedups with this protocol result."
+}

@@ -1,0 +1,54 @@
+{
+  "protocol_path": "results/evidence/2026-08-25_s4_fp32_benchmark/benchmark_protocol.json",
+  "raw_latency_row_count": 4500,
+  "runtime_summaries": [
+    {
+      "runtime": "pytorch",
+      "measured_count": 1500,
+      "primary_latency_median_of_repeat_medians_ms": 48.13255,
+      "throughput_images_per_s": 20.775961381642983,
+      "all_samples_p50_ms": 48.28965,
+      "all_samples_p90_ms": 52.40991,
+      "all_samples_p95_ms": 54.25475,
+      "all_samples_p99_ms": 58.742696,
+      "repeat_median_mean_ms": 48.26132,
+      "repeat_median_std_ms": 1.252260418503275,
+      "repeat_median_cv_percent": 2.594749622478778,
+      "speedup_vs_pytorch_primary": 1.0
+    },
+    {
+      "runtime": "ort_python",
+      "measured_count": 1500,
+      "primary_latency_median_of_repeat_medians_ms": 29.87945,
+      "throughput_images_per_s": 33.467818182730944,
+      "all_samples_p50_ms": 29.556350000000002,
+      "all_samples_p90_ms": 32.26063,
+      "all_samples_p95_ms": 33.140480000000004,
+      "all_samples_p99_ms": 35.97016,
+      "repeat_median_mean_ms": 29.54717,
+      "repeat_median_std_ms": 0.7882592527208291,
+      "repeat_median_cv_percent": 2.6677994972812256,
+      "speedup_vs_pytorch_primary": 1.6108914320712062
+    },
+    {
+      "runtime": "ort_cpp",
+      "measured_count": 1500,
+      "primary_latency_median_of_repeat_medians_ms": 29.302500000000002,
+      "throughput_images_per_s": 34.12678099138299,
+      "all_samples_p50_ms": 29.304,
+      "all_samples_p90_ms": 31.6051,
+      "all_samples_p95_ms": 32.42545,
+      "all_samples_p99_ms": 35.5127,
+      "repeat_median_mean_ms": 29.258,
+      "repeat_median_std_ms": 0.6268176568987187,
+      "repeat_median_cv_percent": 2.142380398177315,
+      "speedup_vs_pytorch_primary": 1.6426089924067913
+    }
+  ],
+  "speedups_primary_latency": {
+    "pytorch_over_ort_python": 1.6108914320712062,
+    "pytorch_over_ort_cpp": 1.6426089924067913,
+    "ort_python_over_ort_cpp": 1.0196894462929782
+  },
+  "stability_pass": true
+}
