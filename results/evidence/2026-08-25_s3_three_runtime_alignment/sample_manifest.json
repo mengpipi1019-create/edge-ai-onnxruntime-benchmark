@@ -1,0 +1,75 @@
+{
+  "purpose": "S3 runtime-consistency samples; derived images are not independent accuracy data.",
+  "pillow_version": "12.2.0",
+  "jpeg_save_parameters": {
+    "format": "JPEG",
+    "quality": 95,
+    "subsampling": 0,
+    "optimize": false,
+    "progressive": false
+  },
+  "samples": [
+    {
+      "sample_id": "cat_original",
+      "file": "images/s3_alignment/cat_original.jpg",
+      "source": "images/cat.jpg",
+      "transform": {
+        "operation": "byte_for_byte_copy"
+      },
+      "width": 1240,
+      "height": 931,
+      "sha256": "03f8b19ad127a17296176ef9ced49a0343487d83759d88436f1044827e0905c1"
+    },
+    {
+      "sample_id": "test_original",
+      "file": "images/s3_alignment/test_original.jpg",
+      "source": "images/test.jpg",
+      "transform": {
+        "operation": "byte_for_byte_copy"
+      },
+      "width": 804,
+      "height": 1024,
+      "sha256": "4012f96d43cc95d0df58887f425954c690b0949f257810c8c2e5952cb0de4250"
+    },
+    {
+      "sample_id": "cat_hflip",
+      "file": "images/s3_alignment/cat_hflip.jpg",
+      "source": "images/cat.jpg",
+      "transform": {
+        "operation": "horizontal_flip"
+      },
+      "width": 1240,
+      "height": 931,
+      "sha256": "9428c2dee851328eb54563f592ce9ef873a00d80de67e1a4b231941e85303880"
+    },
+    {
+      "sample_id": "cat_center_crop",
+      "file": "images/s3_alignment/cat_center_crop.jpg",
+      "source": "images/cat.jpg",
+      "transform": {
+        "operation": "center_crop",
+        "box": [
+          155,
+          116,
+          1085,
+          815
+        ],
+        "retained_fraction_per_axis": 0.75
+      },
+      "width": 930,
+      "height": 699,
+      "sha256": "eecd69a97a597156cde7b42e67d92d24a8701eb67a81817ea8565a811abf13bb"
+    },
+    {
+      "sample_id": "test_hflip",
+      "file": "images/s3_alignment/test_hflip.jpg",
+      "source": "images/test.jpg",
+      "transform": {
+        "operation": "horizontal_flip"
+      },
+      "width": 804,
+      "height": 1024,
+      "sha256": "8c6e1b93fe23451d0dfdfd17b867709ab6b801cbd9959011df6d79cb54be2b84"
+    }
+  ]
+}

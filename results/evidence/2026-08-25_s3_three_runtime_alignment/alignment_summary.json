@@ -1,0 +1,33 @@
+{
+  "sample_count": 5,
+  "model_sha256": "c5ef909be6cda03f0f87a7354355468944e7f8840d5d2d83c344fdbf4a5d3bf6",
+  "python_environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "torch": "2.12.0+cpu",
+    "torchvision": "0.27.0+cpu",
+    "onnxruntime": "1.23.2",
+    "onnxruntime_session_providers": [
+      "CPUExecutionProvider"
+    ],
+    "pillow": "12.2.0"
+  },
+  "same_tensor_thresholds": {
+    "pytorch_vs_ort_python_max_abs": 0.0001,
+    "ort_python_vs_ort_cpp_max_abs": 1e-05
+  },
+  "same_tensor": {
+    "top5_exact_match_count": 5,
+    "pytorch_vs_ort_python_max_abs_overall": 8.58306884765625e-06,
+    "pytorch_vs_ort_python_worst_sample": "cat_hflip",
+    "ort_python_vs_ort_cpp_max_abs_overall": 0.0,
+    "ort_python_vs_ort_cpp_worst_sample": "cat_original"
+  },
+  "end_to_end": {
+    "top1_match_count": 5,
+    "input_max_abs_overall": 2.3634450435638428,
+    "logits_max_abs_overall": 2.4148752689361572
+  },
+  "same_tensor_pass": true,
+  "end_to_end_top1_pass": true,
+  "s3_pass": true
+}
