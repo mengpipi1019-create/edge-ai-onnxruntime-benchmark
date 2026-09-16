@@ -1,0 +1,11 @@
+{
+  "runtime": "pytorch",
+  "repeat_id": 2,
+  "run_order": 3,
+  "affinity_mask": 1,
+  "torch_threads": {
+    "intra_op": 1,
+    "inter_op": 1
+  },
+  "correctness_top1": 285
+}

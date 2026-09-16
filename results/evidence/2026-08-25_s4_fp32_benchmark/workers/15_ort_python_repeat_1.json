@@ -1,0 +1,16 @@
+{
+  "runtime": "ort_python",
+  "repeat_id": 1,
+  "run_order": 15,
+  "affinity_mask": 1,
+  "session_providers": [
+    "CPUExecutionProvider"
+  ],
+  "session_options": {
+    "intra_op_threads": 1,
+    "inter_op_threads": 1,
+    "execution_mode": "ORT_SEQUENTIAL",
+    "graph_optimization": "ORT_ENABLE_ALL"
+  },
+  "correctness_top1": 285
+}
